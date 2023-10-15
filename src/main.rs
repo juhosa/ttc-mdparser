@@ -26,10 +26,6 @@ fn main() -> Result<(), String> {
 - [Oma sivu](https://juhosalli.fi)";
 
     let root = markdown::to_mdast(md, &markdown::ParseOptions::default())?;
-    // println!("{:?}", root);
-
-    // println!("---");
-    // println!("child count {}", root.children().iter().len());
 
     let mut header_found = false;
     let mut items: Vec<ToCheckItem> = Vec::new();
@@ -86,49 +82,6 @@ fn get_list_items(l: &List) -> Vec<ToCheckItem> {
         .collect()
 }
 
-// fn get_list_items(l: &List) -> Vec<ToCheckItem> {
-//     let mut items: Vec<ToCheckItem> = Vec::new();
-
-//     for n in l.children.iter() {
-//         match n {
-//             Node::ListItem(li) => {
-//                 // ListItem -> Paragraph -> Link (url) -> Text (value)
-//                 for p in li.children.iter() {
-//                     match p {
-//                         Node::Paragraph(pp) => {
-//                             for ll in pp.children.iter() {
-//                                 match ll {
-//                                     Node::Link(lll) => {
-//                                         // println!("URL: {}", lll.url);
-//                                         for t in lll.children.iter() {
-//                                             match t {
-//                                                 Node::Text(tt) => {
-//                                                     // println!("value: {}", tt.value);
-//                                                     let ttc: ToCheckItem = ToCheckItem {
-//                                                         text: tt.value.to_string(),
-//                                                         link: lll.url.to_string(),
-//                                                     };
-//                                                     items.push(ttc);
-//                                                 }
-//                                                 _ => {}
-//                                             }
-//                                         }
-//                                     }
-//                                     _ => {}
-//                                 }
-//                             }
-//                         }
-//                         _ => {}
-//                     }
-//                 }
-//             }
-//             _ => {}
-//         }
-//     }
-
-//     items
-// }
-
 fn get_header_title(h: &Heading) -> String {
     h.children
         .iter()
@@ -141,12 +94,4 @@ fn get_header_title(h: &Heading) -> String {
         })
         .next()
         .unwrap_or("".to_string())
-    // for c in h.children.iter() {
-    //     match c {
-    //         Node::Text(cc) => return cc.value.to_string(),
-    //         _ => return "".to_string(),
-    //     }
-    // }
-
-    // "".to_string()
 }
