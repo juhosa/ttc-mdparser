@@ -25,7 +25,16 @@ fn main() -> Result<(), String> {
 - [Visualizing memory layout of Rust's data types](https://www.youtube.com/watch?v=7_o-YRxf_cc&t=0s)
 - [Oma sivu](https://juhosalli.fi)";
 
-    let root = markdown::to_mdast(md, &markdown::ParseOptions::default())?;
+    let items = parse_markdown(&md);
+
+    for item in items.iter() {
+        println!("{}", item);
+    }
+    Ok(())
+}
+
+fn parse_markdown(md: &str) -> Vec<ToCheckItem> {
+    let root = markdown::to_mdast(md, &markdown::ParseOptions::default()).unwrap();
 
     let mut header_found = false;
     let mut items: Vec<ToCheckItem> = Vec::new();
@@ -44,11 +53,7 @@ fn main() -> Result<(), String> {
         }
     }
 
-    for item in items.iter() {
-        println!("{}", item);
-    }
-
-    Ok(())
+    items
 }
 
 fn get_list_items(l: &List) -> Vec<ToCheckItem> {
