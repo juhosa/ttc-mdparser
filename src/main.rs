@@ -1,4 +1,8 @@
+use std::env;
 use std::fmt::Display;
+use std::fs::File;
+use std::io::{self, Read};
+use std::process::exit;
 
 use markdown::{
     self,
@@ -18,12 +22,15 @@ impl Display for ToCheckItem {
 }
 
 fn main() -> Result<(), String> {
-    let md = "## Things to check
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 2 {
+        println!("no file given!");
+        exit(1);
+    }
 
-> Move to a correct place after review.
+    let path = args.get(1).unwrap();
 
-- [Visualizing memory layout of Rust's data types](https://www.youtube.com/watch?v=7_o-YRxf_cc&t=0s)
-- [Oma sivu](https://juhosalli.fi)";
+    let md = read_file(path).expect("Error reading file");
 
     let items = parse_markdown(&md);
 
@@ -31,6 +38,14 @@ fn main() -> Result<(), String> {
         println!("{}", item);
     }
     Ok(())
+}
+
+fn read_file(path: &str) -> Result<String, io::Error> {
+    let mut file = File::open(path)?;
+    let mut content = String::new();
+    file.read_to_string(&mut content)?;
+
+    Ok(content)
 }
 
 fn parse_markdown(md: &str) -> Vec<ToCheckItem> {
