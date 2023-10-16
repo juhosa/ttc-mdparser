@@ -1,6 +1,6 @@
-# Thing To Check Markdown Parser
+# Things To Check Markdown Parser
 
-This app just for reading a very specific markdown file with the following format:
+This app is just for reading a very specific markdown file with the following format:
 
 ```markdown
 ## Videos
