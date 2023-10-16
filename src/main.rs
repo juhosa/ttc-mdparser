@@ -9,7 +9,7 @@ use markdown::{
     mdast::{Heading, List, Node},
 };
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 struct ToCheckItem {
     text: String,
     link: String,
@@ -114,4 +114,34 @@ fn get_header_title(h: &Heading) -> String {
         })
         .next()
         .unwrap_or("".to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_markdown() {
+        let md = "## Things to check
+
+> Move to a correct place after review.
+
+- [Link text](http://link.com)
+- [Link2 text](http://link2.com)";
+
+        let expected = vec![
+            ToCheckItem {
+                text: "Link text".to_string(),
+                link: "http://link.com".to_string(),
+            },
+            ToCheckItem {
+                text: "Link2 text".to_string(),
+                link: "http://link2.com".to_string(),
+            },
+        ];
+
+        let result = parse_markdown(md);
+
+        assert_eq!(result, expected);
+    }
 }
